@@ -34,7 +34,7 @@ npm install
 
 ### 开发环境启动
 ```
-npm run serve
+npm run dev
 ```
 
 ### 编译与生产环境部署
