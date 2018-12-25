@@ -21,7 +21,6 @@ serverCompiler.watch({}, (err, stats) =>{
   if (err) {
     throw err
   }
-  console.log("监听过程中》》》》》》》》》》》》》》》》》》》》》》》》》》")
   stats = stats.toJson()
   stats.errors.forEach(error => console.error(error) )
   stats.warnings.forEach( warn => console.warn(warn) )
@@ -32,6 +31,16 @@ serverCompiler.watch({}, (err, stats) =>{
   bundle = JSON.parse(mfs.readFileSync(bundlePath,'utf-8'))
   console.log('================new bundle generated===================')
 })
+
+// =====解决第三方库中存在使用客户端专有对象如window、document=======
+const { JSDOM } = require("jsdom");
+const dom = new JSDOM("<!doctype html><html><body></body></html>", {
+  url: "http://localhost"
+});
+global.window = dom.window;
+global.document = window.document;
+global.navigator = window.navigator;
+// =====解决第三方库中存在使用客户端专有对象如window、document=======
 
 const handleRequest = async ctx => {
   if (!bundle) {
